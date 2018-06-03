@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="true" scanPeriod="60 seconds">
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <property name="log.path" value="Users/youzhihao/logs/baidu/"/>
+    <contextName>yanxuan-template-api</contextName>
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%p] [%c:%L] %m%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <logger name="automation" additivity="false" level="debug">
+        <appender-ref ref="console"/>
+    </logger>
+    <!-- 日志输出级别 -->
+    <root level="info">
+        <!--<appender-ref ref="console"/>-->
+    </root>
+</configuration>

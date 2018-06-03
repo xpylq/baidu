@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="true" scanPeriod="60 seconds">
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <property name="log.path" value="/home/logs/yanxuan-template-api/"/>
+    <property name="patternValue"
+              value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%p] [%c:%L] \\(%C{16}\\) %m%n"/>
+    <contextName>supplier-template-api</contextName>
+    <!-- 控制台输出 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${patternValue}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!-- 按照每天生成日志文件 -->
+    <appender name="query" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${patternValue}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <fileNamePattern>${log.path}/query.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <appender name="query_data" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${patternValue}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <fileNamePattern>${log.path}/query_data.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <appender name="data_source" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${patternValue}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <fileNamePattern>${log.path}/data_source.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <appender name="stdout" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${patternValue}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <fileNamePattern>${log.path}/stdout.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <appender name="mail" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>${patternValue}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <fileNamePattern>${log.path}/mail.log.%d{yyyy-MM-dd}
+            </fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    <logger name="com.netease.yanxuan.template" level="debug" additivity="false">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <logger name="QUERY_LOGGER" additivity="false" level="debug">
+        <appender-ref ref="query"/>
+    </logger>
+    <logger name="QUERY_DATA_LOGGER" additivity="false" level="debug">
+        <appender-ref ref="query_data"/>
+    </logger>
+    <logger name="druid.sql.Statement" additivity="false" level="debug">
+        <appender-ref ref="data_source"/>
+    </logger>
+    <logger name="druid.sql.ResultSet" additivity="false" level="debug">
+        <appender-ref ref="data_source"/>
+    </logger>
+    <logger name="MAIL_LOGGER" additivity="false" level="info">
+        <appender-ref ref="mail"/>
+    </logger>
+    <!-- 日志输出级别 -->
+    <root level="info">
+        <appender-ref ref="stdout"/>
+    </root>
+</configuration>
