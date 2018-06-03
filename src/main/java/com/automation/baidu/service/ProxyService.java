@@ -54,7 +54,7 @@ public class ProxyService implements Runnable {
                         System.out.println("获取ip:" + ip + ":" + port);
                     }
                     Thread.currentThread().sleep(5000);
-                } catch (InterruptedException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     continue;
                 }
