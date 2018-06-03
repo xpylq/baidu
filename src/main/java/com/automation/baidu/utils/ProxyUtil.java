@@ -1,5 +1,6 @@
 package com.automation.baidu.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.automation.baidu.domain.po.Proxy;
@@ -7,7 +8,6 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.util.EntityUtils;
 
-import javax.swing.text.html.parser.Entity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,18 +33,22 @@ public class ProxyUtil {
     }
 
     public static List<Proxy> getProxyList() {
-        CloseableHttpResponse response = HttpUtil.executeGet("http://api.xdaili.cn/xdaili-api//greatRecharge/getGreatIp?spiderId=4837417faf1f475b8ae49e58aa8ee5fb&orderno=MF2018632339UwIyxb&returnType=2&count=10")
+        List<Proxy> list = new ArrayList<>();
+        CloseableHttpResponse response = HttpUtil.executeGet("");
         try {
             HttpEntity entity = response.getEntity();
             String reuslt = EntityUtils.toString(entity);
-            JSONArray jsonArray = JSONArray.parseArray(reuslt);
-            List<Proxy> list = new ArrayList<>();
+            JSONObject jsonObject = JSON.parseObject(reuslt);
+            JSONArray jsonArray = jsonObject.getJSONArray("RESULT");
             for (int i = 0; i < jsonArray.size(); i++) {
-                list.add()
+                JSONObject object = (JSONObject) jsonArray.get(i);
+                list.add(new Proxy(object.getString("ip"), object.getInteger("port")));
             }
         } catch (IOException e) {
             e.printStackTrace();
+            return list;
         }
+        return list;
     }
 
     public static Proxy take() {
@@ -62,6 +66,10 @@ public class ProxyUtil {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    public static void main(String[] args)
+    {
+        ProxyUtil.getProxyList();
     }
 
 }

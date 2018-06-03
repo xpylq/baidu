@@ -14,6 +14,14 @@ public class Proxy {
     //位置
     private String location;
 
+    public Proxy() {
+    }
+
+    public Proxy(String ip, Integer port) {
+        this.ip = ip;
+        this.port = port;
+    }
+
     public Long getId() {
         return id;
     }
