@@ -1,15 +1,28 @@
 package com.automation.baidu.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.automation.baidu.domain.po.Proxy;
+import com.automation.baidu.utils.HttpClientTemplate;
+import com.automation.baidu.utils.HttpUtil;
 import com.automation.baidu.utils.ProxyUtil;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -20,19 +33,23 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class ProxyService implements Runnable {
 
+    private static Logger logger = LoggerFactory.getLogger("automation");
+
     //免费代理的网址
     public static String url = "https://www.kuaidaili.com/free/intr/{0}/";
 
+
     private WebDriver driver;
 
-    public ProxyService() {
-        driver = new ChromeDriver();
-        driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-    }
+    @Autowired
+    private HttpClientTemplate httpClientTemplate;
+
 
     @PostConstruct
     public void init() {
-        Executors.newFixedThreadPool(1).submit(this);
+        //driver = new ChromeDriver();
+        //driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+        //Executors.newFixedThreadPool(1).submit(this);
     }
 
     public void parse() {
@@ -60,6 +77,24 @@ public class ProxyService implements Runnable {
                 }
             }
         }
+    }
+
+    public List<Proxy> getProxyList() {
+        List<Proxy> list = new ArrayList<>();
+        try {
+            String response = httpClientTemplate.executeGet("http://api.xdaili.cn/xdaili-api//greatRecharge/getGreatIp?spiderId=4837417faf1f475b8ae49e58aa8ee5fb&orderno=YZ2018649601CyHsGu&returnType=2&count=5");
+            JSONObject jsonObject = JSON.parseObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("RESULT");
+            for (int i = 0; i < jsonArray.size(); i++) {
+                JSONObject object = (JSONObject) jsonArray.get(i);
+                list.add(new Proxy(object.getString("ip"), object.getInteger("port")));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return list;
+        }
+        logger.info("[op:getProxyList],proxyList={}", JSONObject.toJSON(list));
+        return list;
     }
 
     @Override

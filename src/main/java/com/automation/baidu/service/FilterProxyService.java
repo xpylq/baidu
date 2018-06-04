@@ -27,10 +27,10 @@ public class FilterProxyService implements Runnable {
 
     @PostConstruct
     public void init() {
-        ExecutorService filterExecutor = Executors.newFixedThreadPool(10);
-        for (int i = 0; i < 10; i++) {
-            filterExecutor.submit(this);
-        }
+//        ExecutorService filterExecutor = Executors.newFixedThreadPool(10);
+//        for (int i = 0; i < 10; i++) {
+//            filterExecutor.submit(this);
+//        }
     }
 
     @Override

@@ -32,24 +32,6 @@ public class ProxyUtil {
         return true;
     }
 
-    public static List<Proxy> getProxyList() {
-        List<Proxy> list = new ArrayList<>();
-        CloseableHttpResponse response = HttpUtil.executeGet("");
-        try {
-            HttpEntity entity = response.getEntity();
-            String reuslt = EntityUtils.toString(entity);
-            JSONObject jsonObject = JSON.parseObject(reuslt);
-            JSONArray jsonArray = jsonObject.getJSONArray("RESULT");
-            for (int i = 0; i < jsonArray.size(); i++) {
-                JSONObject object = (JSONObject) jsonArray.get(i);
-                list.add(new Proxy(object.getString("ip"), object.getInteger("port")));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return list;
-        }
-        return list;
-    }
 
     public static Proxy take() {
         try {
@@ -69,7 +51,6 @@ public class ProxyUtil {
     }
     public static void main(String[] args)
     {
-        ProxyUtil.getProxyList();
     }
 
 }

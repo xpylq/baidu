@@ -32,7 +32,8 @@ public class Application extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) throws Exception {
-        System.setProperty("webdriver.chrome.driver","C:\\Users\\PC2018\\AppData\\Local\\Google\\Chrome\\Application\\chromedriver.exe");
+        System.setProperty("java.awt.headless", "true");
+//        System.setProperty("webdriver.chrome.driver","C:\\Users\\PC2018\\AppData\\Local\\Google\\Chrome\\Application\\chromedriver.exe");
         SpringApplication.run(Application.class, args);
     }
 }
